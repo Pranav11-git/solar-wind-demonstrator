@@ -1,731 +1,480 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>SolarWinds Alert Simulator</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        body {
-            margin: 0;
-            background: #f4f5f7;
-            color: #172b4d;
-        }
-
-        .header {
-            background: #172b4d;
-            color: white;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        .header span {
-            font-size: 14px;
-            opacity: 0.85;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-
-        .card h2 {
-            margin-top: 0;
-            font-size: 20px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-        }
-
-        .full {
-            grid-column: 1 / -1;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 7px;
-            font-size: 14px;
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 11px 12px;
-            border: 1px solid #c1c7d0;
-            border-radius: 6px;
-            font-size: 14px;
-            outline: none;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #0052cc;
-        }
-
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        button {
-            border: none;
-            border-radius: 6px;
-            padding: 12px 22px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .send-btn {
-            background: #0052cc;
-            color: white;
-        }
-
-        .send-btn:hover {
-            background: #0747a6;
-        }
-
-        .reset-btn {
-            background: #dfe1e6;
-            color: #172b4d;
-        }
-
-        .critical-btn {
-            background: #de350b;
-            color: white;
-        }
-
-        .warning-btn {
-            background: #ffab00;
-            color: #172b4d;
-        }
-
-        .info-btn {
-            background: #00a3bf;
-            color: white;
-        }
-
-        .status {
-            padding: 15px;
-            border-radius: 6px;
-            margin-top: 20px;
-            display: none;
-            white-space: pre-wrap;
-        }
-
-        .success {
-            display: block;
-            background: #e3fcef;
-            color: #006644;
-            border: 1px solid #36b37e;
-        }
-
-        .error {
-            display: block;
-            background: #ffebe6;
-            color: #bf2600;
-            border: 1px solid #ff5630;
-        }
-
-        .loading {
-            display: block;
-            background: #deebff;
-            color: #0747a6;
-            border: 1px solid #4c9aff;
-        }
-
-        .payload {
-            background: #091e42;
-            color: #ffffff;
-            padding: 20px;
-            border-radius: 7px;
-            overflow-x: auto;
-            font-size: 13px;
-            min-height: 180px;
-        }
-
-        .quick-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .quick-buttons button {
-            padding: 9px 14px;
-        }
-
-        .security-note {
-            background: #fff0b3;
-            border-left: 4px solid #ffab00;
-            padding: 12px 15px;
-            margin-bottom: 20px;
-            font-size: 13px;
-        }
-
-        @media (max-width: 700px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .full {
-                grid-column: auto;
-            }
-
-            .header {
-                padding: 20px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoring Integration Simulator</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f5f7;color:#172b4d;font-family:Arial,Helvetica,sans-serif}
+.header{background:#172b4d;color:#fff;padding:20px 34px;display:flex;justify-content:space-between;align-items:center}
+.header h1{margin:0;font-size:23px}.header span{font-size:13px;opacity:.85}
+.container{max-width:1180px;margin:28px auto;padding:0 18px}
+.card{background:#fff;border-radius:10px;padding:24px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+h2{margin:0 0 18px;font-size:19px}
+h3{font-size:15px;margin:18px 0 10px}
+.tabs{display:flex;gap:8px;margin-bottom:20px}
+.tab{flex:1;padding:14px;border:1px solid #c1c7d0;background:#fff;border-radius:8px;font-weight:bold;cursor:pointer}
+.tab.active{background:#0052cc;color:#fff;border-color:#0052cc}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+label{display:block;font-weight:bold;font-size:13px;margin-bottom:6px}
+input,select,textarea{width:100%;padding:10px 11px;border:1px solid #c1c7d0;border-radius:6px;font-size:14px;background:#fff}
+textarea{min-height:88px;resize:vertical}
+button{border:0;border-radius:6px;padding:11px 17px;font-weight:bold;cursor:pointer}
+.send{background:#0052cc;color:#fff}.reset{background:#dfe1e6;color:#172b4d}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.quick button{background:#ebecf0}
+.quick .critical{background:#de350b;color:#fff}.quick .high{background:#ff8b00;color:#fff}
+.quick .recovery{background:#36b37e;color:#fff}
+.actions{display:flex;gap:10px;margin-top:18px}
+.mapping{width:100%;border-collapse:collapse;font-size:13px}
+.mapping th,.mapping td{border:1px solid #dfe1e6;padding:10px;text-align:left}
+.mapping th{background:#f4f5f7}
+.payload{background:#091e42;color:#fff;border-radius:7px;padding:18px;min-height:190px;overflow:auto;font:13px/1.5 Consolas,monospace;white-space:pre-wrap}
+.status{display:none;margin-top:16px;padding:13px;border-radius:7px;white-space:pre-wrap;font-size:13px}
+.status.success{display:block;background:#e3fcef;color:#006644;border:1px solid #36b37e}
+.status.error{display:block;background:#ffebe6;color:#bf2600;border:1px solid #ff5630}
+.status.loading{display:block;background:#deebff;color:#0747a6;border:1px solid #4c9aff}
+.note{background:#fff0b3;border-left:4px solid #ffab00;padding:12px 14px;font-size:13px;margin-bottom:20px}
+.flow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+.flow span{padding:10px 13px;background:#f4f5f7;border-radius:7px;font-size:12px;font-weight:bold}
+.arrow{background:none!important;padding:0!important}
+.hidden{display:none}
+.badge{display:inline-block;padding:4px 8px;border-radius:12px;background:#deebff;color:#0747a6;font-size:11px;font-weight:bold}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.header{padding:18px}.tabs{flex-direction:column}}
+</style>
 </head>
-
 <body>
 
 <div class="header">
-    <h1>SolarWinds Alert Simulator</h1>
-    <span>JSM Operations Demo</span>
+  <h1>Monitoring Integration Simulator</h1>
+  <span>SolarWinds NPM + Reliable Controls BMS</span>
 </div>
 
 <div class="container">
 
-    <div class="security-note">
-        <strong>Demo Security:</strong>
-        The API key is entered at runtime and is not stored by this page.
-        For production use, put the JSM integration call behind a backend/server.
+<div class="card">
+  <h2>Integration Source</h2>
+  <div class="tabs">
+    <button id="solarTab" class="tab active" onclick="switchSource('solar')">SolarWinds NPM</button>
+    <button id="bmsTab" class="tab" onclick="switchSource('bms')">Reliable Controls BMS</button>
+  </div>
+  <div id="sourceDescription">
+    Simulate a network monitoring alert from SolarWinds and send it to your JSM Ops integration.
+  </div>
+</div>
+
+<div class="card">
+  <h2>JSM Integration Configuration</h2>
+  <div class="note">
+    The simulator uses hard-coded source-specific configuration. The SolarWinds tab posts the
+    SolarWinds field convention (<b>ActionType</b>, <b>AlertMessage</b>, <b>alias</b>,
+    <b>AlertDescription</b>, <b>Severity</b>, <b>source</b>, <b>tags</b>) to the SolarWinds
+    integration endpoint. The BMS tab posts the JSM Ops v2 alert format. Keep integration keys
+    private and use the exact endpoint configured for each integration.
+  </div>
+  <div class="grid">
+    <div>
+      <label>SolarWinds Integration</label>
+      <input value="SolarWinds NPM → Network team(demo)" disabled>
     </div>
-
-    <!-- Connection -->
-    <div class="card">
-
-        <h2>JSM Connection</h2>
-
-        <div class="grid">
-
-            <div class="full">
-                <label>JSM Ops Integration URL</label>
-
-                <input
-                    id="url"
-                    type="text"
-                    value="https://api.atlassian.com/jsm/ops/integration/v1/json/solarwinds?apiKey=e4ceac05-9421-4a1a-9a9a-2550a0d2a4e7"
-                >
-            </div>
-
-            <div class="full">
-                <label>GenieKey / API Key</label>
-
-                <input
-                    id="apiKey"
-                    type="password"
-                    placeholder="Enter your JSM integration API key"
-                    value="e4ceac05-9421-4a1a-9a9a-2550a0d2a4e7"
-                >
-            </div>
-
-        </div>
-
+    <div>
+      <label>Reliable Controls Integration</label>
+      <input value="Reliable Controls BMS → Network team(demo)" disabled>
     </div>
-
-
-    <!-- Alert Form -->
-    <div class="card">
-
-        <h2>Generate SolarWinds Alert</h2>
-
-        <div class="grid">
-
-            <div>
-                <label>Action Type</label>
-
-                <select id="actionType">
-                    <option value="Create">Create</option>
-                    <option value="Acknowledge">Acknowledge</option>
-                    <option value="Close">Close</option>
-                </select>
-            </div>
-
-
-            <div>
-                <label>Severity</label>
-
-                <select id="severity">
-                    <option value="Critical">Critical</option>
-                    <option value="High">High</option>
-                    <option value="Moderate">Moderate</option>
-                    <option value="Low">Low</option>
-                    <option value="Info">Info</option>
-                </select>
-            </div>
-
-
-            <div>
-                <label>Device Name</label>
-
-                <input
-                    id="device"
-                    type="text"
-                    value="Core-Switch-03"
-                    placeholder="e.g. Core-Switch-03"
-                >
-            </div>
-
-
-            <div>
-                <label>Alert Alias</label>
-
-                <input
-                    id="alias"
-                    type="text"
-                    value="solarwinds-test-01"
-                    placeholder="Unique alert alias"
-                >
-            </div>
-
-
-            <div class="full">
-                <label>Alert Message</label>
-
-                <input
-                    id="alertMessage"
-                    type="text"
-                    value="Network device unreachable - Core-Switch-03"
-                >
-            </div>
-
-
-            <div class="full">
-                <label>Alert Description</label>
-
-                <textarea id="description">SolarWinds NPM detected device down during evaluation demo</textarea>
-            </div>
-
-
-            <div>
-                <label>Source</label>
-
-                <input
-                    id="source"
-                    type="text"
-                    value="SolarWinds NPM"
-                >
-            </div>
-
-
-            <div>
-                <label>Tags</label>
-
-                <input
-                    id="tags"
-                    type="text"
-                    value="network,demo"
-                    placeholder="network,demo"
-                >
-            </div>
-
-        </div>
-
-
-        <div class="quick-buttons">
-
-            <button
-                class="critical-btn"
-                onclick="criticalAlert()">
-                Critical Network Alert
-            </button>
-
-            <button
-                class="warning-btn"
-                onclick="warningAlert()">
-                Warning Alert
-            </button>
-
-            <button
-                class="info-btn"
-                onclick="infoAlert()">
-                Informational Alert
-            </button>
-
-        </div>
-
-
-        <div class="buttons">
-
-            <button
-                class="send-btn"
-                onclick="sendAlert()">
-                🚨 Send Alert to JSM
-            </button>
-
-            <button
-                class="reset-btn"
-                onclick="resetForm()">
-                Reset
-            </button>
-
-        </div>
-
-        <div id="status" class="status"></div>
-
+    <div class="full">
+      <label>Current Source Configuration</label>
+      <input id="configuredEndpoint" value="SolarWinds NPM" disabled>
     </div>
+  </div>
+</div>
 
+<div class="card">
+  <h2 id="formTitle">SolarWinds Alert</h2>
 
-    <!-- Payload Preview -->
-    <div class="card">
-
-        <h2>Payload Preview</h2>
-
-        <pre id="payload" class="payload"></pre>
-
+  <div id="solarForm">
+    <div class="grid">
+      <div>
+        <label>Action Type</label>
+        <select id="solarAction">
+          <option>Create</option><option>Acknowledge</option><option>Close</option>
+        </select>
+      </div>
+      <div>
+        <label>Severity</label>
+        <select id="solarSeverity">
+          <option>Critical</option><option>High</option><option>Moderate</option><option>Low</option><option>Info</option>
+        </select>
+      </div>
+      <div>
+        <label>Device Name <span class="badge">used in message</span></label>
+        <input id="solarDevice" value="Core-Switch-03">
+      </div>
+      <div>
+        <label>Alert Alias</label>
+        <input id="solarAlias" value="solarwinds-demo-01">
+      </div>
+      <div class="full">
+        <label>Alert Message</label>
+        <input id="solarMessage" value="Network device unreachable - Core-Switch-03">
+      </div>
+      <div class="full">
+        <label>Alert Description</label>
+        <textarea id="solarDescription">SolarWinds NPM detected device down during the evaluation demo.</textarea>
+      </div>
+      <div>
+        <label>Source</label>
+        <input id="solarSource" value="SolarWinds NPM">
+      </div>
+      <div>
+        <label>Tags <span class="badge">comma-separated string</span></label>
+        <input id="solarTags" value="network,critical,solarwinds,demo">
+      </div>
     </div>
+    <div class="quick">
+      <button class="critical" onclick="solarPreset('critical')">Critical Network Down</button>
+      <button class="high" onclick="solarPreset('high')">High CPU</button>
+      <button onclick="solarPreset('moderate')">Moderate Latency</button>
+      <button class="recovery" onclick="solarPreset('recovery')">Device Recovered</button>
+    </div>
+  </div>
+
+  <div id="bmsForm" class="hidden">
+    <div class="grid">
+      <div>
+        <label>Action Type</label>
+        <select id="bmsAction">
+          <option>Create</option><option>Acknowledge</option><option>Close</option>
+        </select>
+      </div>
+      <div>
+        <label>Severity</label>
+        <select id="bmsSeverity">
+          <option>Critical</option><option>High</option><option>Moderate</option><option>Low</option><option>Info</option>
+        </select>
+      </div>
+      <div>
+        <label>Building</label>
+        <input id="building" value="Tarrant County 911 Operations Center">
+      </div>
+      <div>
+        <label>Facility / Zone</label>
+        <input id="zone" value="911 Dispatch Server Room">
+      </div>
+      <div>
+        <label>System</label>
+        <input id="system" value="HVAC">
+      </div>
+      <div>
+        <label>Controller</label>
+        <input id="controller" value="RC-BACnet-CTRL-07">
+      </div>
+      <div>
+        <label>Alarm Type</label>
+        <input id="alarm" value="High Temperature">
+      </div>
+      <div>
+        <label>Current Temperature</label>
+        <input id="temperature" value="88°F">
+      </div>
+      <div>
+        <label>Configured Threshold</label>
+        <input id="threshold" value="80°F">
+      </div>
+      <div>
+        <label>Alert Alias</label>
+        <input id="bmsAlias" value="RC-BMS-TEMP-001">
+      </div>
+      <div class="full">
+        <label>Alert Description</label>
+        <textarea id="bmsDescription">Reliable Controls BMS detected a temperature of 88°F in the 911 Dispatch Server Room. Configured threshold is 80°F.</textarea>
+      </div>
+      <div>
+        <label>Source</label>
+        <input id="bmsSource" value="Reliable Controls BMS">
+      </div>
+      <div>
+        <label>Tags</label>
+        <input id="bmsTags" value="BMS,HVAC,temperature,Tarrant911,demo">
+      </div>
+    </div>
+    <div class="quick">
+      <button class="critical" onclick="bmsPreset('temperature')">Critical Temperature</button>
+      <button class="high" onclick="bmsPreset('hvac')">HVAC Failure</button>
+      <button onclick="bmsPreset('communication')">Controller Communication</button>
+      <button class="recovery" onclick="bmsPreset('recovery')">BMS Recovery</button>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="send" onclick="sendAlert()">🚨 Send Alert to JSM</button>
+    <button class="reset" onclick="resetCurrent()">Reset</button>
+  </div>
+  <div id="status" class="status"></div>
+</div>
+
+<div class="card">
+  <h2>Severity Mapping</h2>
+  <table class="mapping">
+    <thead><tr><th>Monitoring Severity</th><th>Value Sent (SolarWinds)</th><th>Value Sent (BMS / Ops v2)</th><th>Suggested Jira Priority</th></tr></thead>
+    <tbody>
+      <tr><td>Critical</td><td>Sev-0</td><td>P1</td><td>Highest / P1</td></tr>
+      <tr><td>High</td><td>Sev-1</td><td>P2</td><td>High / P2</td></tr>
+      <tr><td>Moderate</td><td>Sev-2</td><td>P3</td><td>Medium / P3</td></tr>
+      <tr><td>Low</td><td>Sev-3</td><td>P4</td><td>Low / P4</td></tr>
+      <tr><td>Info</td><td>Sev-3</td><td>P5</td><td>Lowest / P5</td></tr>
+    </tbody>
+  </table>
+  <div class="flow">
+    <span id="flowSource">SolarWinds NPM</span><span class="arrow">→</span>
+    <span>JSM Ops</span><span class="arrow">→</span>
+    <span>Severity Mapping</span><span class="arrow">→</span>
+    <span>JSM Incident</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Payload Preview</h2>
+  <div class="note">
+    <b>SolarWinds:</b> ActionType, AlertMessage, alias, AlertDescription, Severity (Sev-0…Sev-3),
+    source, tags (comma-separated string).<br>
+    <b>Reliable Controls BMS (Ops v2):</b> message, description, source, alias, entity,
+    tags (array), optional priority.
+  </div>
+  <div id="payload" class="payload"></div>
+</div>
 
 </div>
 
-
 <script>
+let currentSource = "solar";
 
-function getPayload() {
+// ============================================================
+// HARD-CODED DEMO CONFIGURATION
+// Keep these values local for your demo; do not publish the file.
+// ============================================================
+const DEMO_CONFIG = {
+  solar: {
+    name: "SolarWinds NPM",
+    team: "Network team(demo)",
+    url: "https://api.atlassian.com/jsm/ops/integration/v1/json/solarwinds?apiKey=e4ceac05-9421-4a1a-9a9a-2550a0d2a4e7",
+    apiKey: "e4ceac05-9421-4a1a-9a9a-2550a0d2a4e7"
+  },
+  bms: {
+    name: "Reliable Controls BMS",
+    team: "Network team(demo)",
+    url: "https://api.atlassian.com/jsm/ops/integration/v2/alerts",
+    apiKey: "11c8a508-418c-4d75-b55d-ad30bcbf197a"
+  }
+};
 
-    return {
+// SolarWinds integration convention: Sev-0 (most severe) … Sev-3
+const SOLAR_SEVERITY_MAP = {
+  Critical: "Sev-0",
+  High:     "Sev-1",
+  Moderate: "Sev-2",
+  Low:      "Sev-3",
+  Info:     "Sev-3"
+};
 
-        ActionType:
-            document.getElementById("actionType").value,
+// Ops v2 priority values
+const OPS_PRIORITY_MAP = {
+  Critical: "P1",
+  High:     "P2",
+  Moderate: "P3",
+  Low:      "P4",
+  Info:     "P5"
+};
 
-        AlertMessage:
-            document.getElementById("alertMessage").value,
+function switchSource(source){
+  currentSource = source;
+  document.getElementById("solarTab").classList.toggle("active", source==="solar");
+  document.getElementById("bmsTab").classList.toggle("active", source==="bms");
+  document.getElementById("solarForm").classList.toggle("hidden", source!=="solar");
+  document.getElementById("bmsForm").classList.toggle("hidden", source!=="bms");
 
-        alias:
-            document.getElementById("alias").value,
-
-        AlertDescription:
-            document.getElementById("description").value,
-
-        Severity:
-            document.getElementById("severity").value,
-
-        source:
-            document.getElementById("source").value,
-
-        tags:
-            document.getElementById("tags").value
-
-    };
-
+  if(source==="solar"){
+    document.getElementById("formTitle").textContent="SolarWinds Alert";
+    document.getElementById("sourceDescription").textContent="Simulate a network monitoring alert from SolarWinds and send it to the hard-coded SolarWinds JSM Ops integration.";
+    document.getElementById("flowSource").textContent="SolarWinds NPM";
+  }else{
+    document.getElementById("formTitle").textContent="Reliable Controls BMS Alarm";
+    document.getElementById("sourceDescription").textContent="Simulate a building-management alarm and send it to the hard-coded Reliable Controls BMS JSM Ops integration.";
+    document.getElementById("flowSource").textContent="Reliable Controls BMS";
+  }
+  document.getElementById("configuredEndpoint").value=DEMO_CONFIG[source].name+" → "+DEMO_CONFIG[source].team;
+  updatePreview();
 }
 
-
-function updatePayloadPreview() {
-
-    const payload = getPayload();
-
-    document.getElementById("payload").textContent =
-        JSON.stringify(payload, null, 4);
-
+// ------------------------------------------------------------
+// SolarWinds payload — matches the integration's field convention.
+// Field names are CASE-SENSITIVE; do not rename these keys.
+// ------------------------------------------------------------
+function solarPayload(){
+  const severity = document.getElementById("solarSeverity").value;
+  return {
+    ActionType:       document.getElementById("solarAction").value,
+    AlertMessage:     document.getElementById("solarMessage").value.trim(),
+    alias:            document.getElementById("solarAlias").value.trim(),
+    AlertDescription: document.getElementById("solarDescription").value.trim(),
+    Severity:         SOLAR_SEVERITY_MAP[severity] || "Sev-2",
+    source:           document.getElementById("solarSource").value.trim(),
+    tags:             document.getElementById("solarTags").value
+                        .split(",").map(t=>t.trim()).filter(Boolean).join(",")
+  };
 }
 
-
-async function sendAlert() {
-
-    const url =
-        document.getElementById("url").value.trim();
-
-    const apiKey =
-        document.getElementById("apiKey").value.trim();
-
-    const status =
-        document.getElementById("status");
-
-
-    if (!url) {
-
-        showStatus(
-            "Please enter the JSM integration URL.",
-            "error"
-        );
-
-        return;
-    }
-
-
-    if (!apiKey) {
-
-        showStatus(
-            "Please enter your JSM API key.",
-            "error"
-        );
-
-        return;
-    }
-
-
-    const payload = getPayload();
-
-
-    updatePayloadPreview();
-
-
-    showStatus(
-        "Sending SolarWinds alert to JSM...",
-        "loading"
-    );
-
-
-    try {
-
-        const response = await fetch(url, {
-
-            method: "POST",
-
-            headers: {
-
-                "Content-Type": "application/json",
-
-                "Authorization":
-                    "GenieKey " + apiKey
-
-            },
-
-            body:
-                JSON.stringify(payload)
-
-        });
-
-
-        const responseText =
-            await response.text();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "HTTP " +
-                response.status +
-                "\n\n" +
-                responseText
-            );
-
-        }
-
-
-        let formattedResponse =
-            responseText;
-
-
-        try {
-
-            formattedResponse =
-                JSON.stringify(
-                    JSON.parse(responseText),
-                    null,
-                    4
-                );
-
-        } catch (e) {
-
-            // Response was not JSON
-
-        }
-
-
-        showStatus(
-            "SUCCESS - Alert sent to JSM!\n\n" +
-            formattedResponse,
-            "success"
-        );
-
-    }
-
-    catch (error) {
-
-        showStatus(
-            "FAILED - Could not send alert.\n\n" +
-            error.message +
-            "\n\n" +
-            "If this is a browser CORS error, use the backend option described below.",
-            "error"
-        );
-
-    }
-
+// ------------------------------------------------------------
+// BMS payload — JSM Ops v2 alert format.
+// ------------------------------------------------------------
+function bmsPayload(){
+  const severity = document.getElementById("bmsSeverity").value;
+  const alarm = document.getElementById("alarm").value.trim();
+  const zone  = document.getElementById("zone").value.trim();
+  return {
+    message: `${alarm} - ${zone}`,
+    alias: document.getElementById("bmsAlias").value.trim(),
+    entity: document.getElementById("controller").value.trim(),
+    description: document.getElementById("bmsDescription").value.trim(),
+    source: document.getElementById("bmsSource").value.trim(),
+    tags: document.getElementById("bmsTags").value.split(",").map(tag=>tag.trim()).filter(Boolean),
+    priority: OPS_PRIORITY_MAP[severity] || "P3"
+  };
 }
 
-
-function showStatus(message, type) {
-
-    const status =
-        document.getElementById("status");
-
-    status.className =
-        "status " + type;
-
-    status.textContent =
-        message;
-
+function getPayload(){
+  return currentSource==="solar" ? solarPayload() : bmsPayload();
 }
 
-
-function criticalAlert() {
-
-    document.getElementById("severity").value =
-        "Critical";
-
-    document.getElementById("device").value =
-        "Core-Switch-03";
-
-    document.getElementById("alias").value =
-        "solarwinds-critical-01";
-
-    document.getElementById("alertMessage").value =
-        "Network device unreachable - Core-Switch-03";
-
-    document.getElementById("description").value =
-        "SolarWinds NPM detected a critical network device failure during the ITSM demonstration.";
-
-    document.getElementById("tags").value =
-        "network,critical,solarwinds,demo";
-
-    updatePayloadPreview();
-
+// The two sources use different key names for the message.
+function getMessageField(payload){
+  return currentSource==="solar" ? payload.AlertMessage : payload.message;
 }
 
-
-function warningAlert() {
-
-    document.getElementById("severity").value =
-        "High";
-
-    document.getElementById("device").value =
-        "Distribution-Switch-01";
-
-    document.getElementById("alias").value =
-        "solarwinds-warning-01";
-
-    document.getElementById("alertMessage").value =
-        "High CPU utilization - Distribution-Switch-01";
-
-    document.getElementById("description").value =
-        "SolarWinds NPM detected sustained CPU utilization above the configured threshold.";
-
-    document.getElementById("tags").value =
-        "network,performance,warning,demo";
-
-    updatePayloadPreview();
-
+function updatePreview(){
+  const p=getPayload();
+  document.getElementById("payload").textContent=JSON.stringify(p,null,4);
 }
 
+async function sendAlert(){
+  const config=DEMO_CONFIG[currentSource];
+  const payload=getPayload();
 
-function infoAlert() {
+  if(!config.url || config.url.includes("PASTE_")){
+    showStatus("Configure the "+config.name+" integration URL in DEMO_CONFIG first.","error");
+    return;
+  }
+  if(!config.apiKey || config.apiKey.includes("PASTE_")){
+    showStatus("Configure the "+config.name+" GenieKey/API key in DEMO_CONFIG first.","error");
+    return;
+  }
 
-    document.getElementById("severity").value =
-        "Info";
+  const message = getMessageField(payload);
+  if(!message || !message.trim()){
+    showStatus("Message is required. Please enter an alert/alarm message.","error");
+    return;
+  }
+  if(!payload.alias || !payload.alias.trim()){
+    showStatus("Alias is required.","error");
+    return;
+  }
 
-    document.getElementById("device").value =
-        "Access-Point-12";
+  showStatus("Sending "+config.name+" alert to JSM...","loading");
 
-    document.getElementById("alias").value =
-        "solarwinds-info-01";
-
-    document.getElementById("alertMessage").value =
-        "Network device recovered - Access-Point-12";
-
-    document.getElementById("description").value =
-        "SolarWinds NPM reports that the previously unavailable network device has recovered.";
-
-    document.getElementById("tags").value =
-        "network,recovery,solarwinds,demo";
-
-    updatePayloadPreview();
-
-}
-
-
-function resetForm() {
-
-    document.getElementById("actionType").value =
-        "Create";
-
-    document.getElementById("severity").value =
-        "Critical";
-
-    document.getElementById("device").value =
-        "Core-Switch-03";
-
-    document.getElementById("alias").value =
-        "solarwinds-test-01";
-
-    document.getElementById("alertMessage").value =
-        "Network device unreachable - Core-Switch-03";
-
-    document.getElementById("description").value =
-        "SolarWinds NPM detected device down during evaluation demo";
-
-    document.getElementById("source").value =
-        "SolarWinds NPM";
-
-    document.getElementById("tags").value =
-        "network,demo";
-
-    document.getElementById("status").className =
-        "status";
-
-    updatePayloadPreview();
-
-}
-
-
-document
-    .querySelectorAll("input, select, textarea")
-    .forEach(element => {
-
-        element.addEventListener(
-            "input",
-            updatePayloadPreview
-        );
-
-        element.addEventListener(
-            "change",
-            updatePayloadPreview
-        );
-
+  try{
+    const response=await fetch(config.url,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":"GenieKey "+config.apiKey
+      },
+      body:JSON.stringify(payload)
     });
 
+    const text=await response.text();
+    if(!response.ok) throw new Error("HTTP "+response.status+"\n\n"+text);
 
-updatePayloadPreview();
+    let result=text;
+    try{result=JSON.stringify(JSON.parse(text),null,4)}catch(e){}
+    showStatus("SUCCESS - Alert sent to JSM!\n\n"+result,"success");
+  }catch(error){
+    showStatus("FAILED - Could not send alert.\n\n"+error.message+"\n\nIf the browser reports CORS, use a small backend/proxy rather than disabling browser security.","error");
+  }
+}
 
+function solarPreset(type){
+  if(type==="critical"){
+    setValues("solarAction","Create","solarSeverity","Critical","solarDevice","Core-Switch-03","solarAlias","solarwinds-critical-01","solarMessage","Network device unreachable - Core-Switch-03","solarDescription","SolarWinds NPM detected a critical network device failure.","solarTags","network,critical,solarwinds,demo");
+  }else if(type==="high"){
+    setValues("solarAction","Create","solarSeverity","High","solarDevice","Distribution-Switch-01","solarAlias","solarwinds-high-01","solarMessage","High CPU utilization - Distribution-Switch-01","solarDescription","SolarWinds NPM detected sustained CPU utilization above the configured threshold.","solarTags","network,performance,high,solarwinds,demo");
+  }else if(type==="moderate"){
+    setValues("solarAction","Create","solarSeverity","Moderate","solarDevice","Core-Router-02","solarAlias","solarwinds-moderate-01","solarMessage","Network latency above threshold - Core-Router-02","solarDescription","SolarWinds NPM detected elevated latency on the core router.","solarTags","network,latency,moderate,solarwinds,demo");
+  }else{
+    // Recovery closes the alert that the Critical preset opened — same alias.
+    setValues("solarAction","Close","solarSeverity","Info","solarDevice","Core-Switch-03","solarAlias","solarwinds-critical-01","solarMessage","Network device recovered - Core-Switch-03","solarDescription","SolarWinds NPM reports that the previously unavailable device has recovered.","solarTags","network,recovery,solarwinds,demo");
+  }
+  updatePreview();
+}
+
+function bmsPreset(type){
+  if(type==="temperature"){
+    setValues("bmsAction","Create","bmsSeverity","Critical","building","Tarrant County 911 Operations Center","zone","911 Dispatch Server Room","system","HVAC","controller","RC-BACnet-CTRL-07","alarm","High Temperature","temperature","88°F","threshold","80°F","bmsAlias","RC-BMS-TEMP-001","bmsDescription","Reliable Controls BMS detected a temperature of 88°F in the 911 Dispatch Server Room. Configured threshold is 80°F.","bmsTags","BMS,HVAC,temperature,Tarrant911,critical,demo");
+  }else if(type==="hvac"){
+    setValues("bmsAction","Create","bmsSeverity","High","building","Tarrant County 911 Operations Center","zone","911 Dispatch Floor","system","HVAC","controller","RC-BACnet-CTRL-12","alarm","HVAC Unit Failure","temperature","N/A","threshold","N/A","bmsAlias","RC-HVAC-FAIL-002","bmsDescription","Reliable Controls BMS detected a failure condition on HVAC Unit AHU-02 serving the dispatch floor.","bmsTags","BMS,HVAC,facility,high,demo");
+  }else if(type==="communication"){
+    setValues("bmsAction","Create","bmsSeverity","Moderate","building","Tarrant County 911 Operations Center","zone","Administration Building","system","Building Controls","controller","RC-BACnet-CTRL-18","alarm","Controller Communication Lost","temperature","N/A","threshold","N/A","bmsAlias","RC-COMM-003","bmsDescription","Reliable Controls BMS reports loss of communication with a building controller.","bmsTags","BMS,BACnet,communication,moderate,demo");
+  }else{
+    setValues("bmsAction","Close","bmsSeverity","Info","building","Tarrant County 911 Operations Center","zone","911 Dispatch Server Room","system","HVAC","controller","RC-BACnet-CTRL-07","alarm","Temperature Normal / Recovered","temperature","72°F","threshold","80°F","bmsAlias","RC-BMS-TEMP-001","bmsDescription","Reliable Controls BMS reports that the temperature has returned to the configured operating range.","bmsTags","BMS,HVAC,recovery,info,demo");
+  }
+  updatePreview();
+}
+
+function setValues(...args){
+  for(let i=0;i<args.length;i+=2) document.getElementById(args[i]).value=args[i+1];
+}
+
+function resetCurrent(){
+  if(currentSource==="solar"){
+    document.getElementById("solarSeverity").value="Critical";
+    document.getElementById("solarAction").value="Create";
+    document.getElementById("solarDevice").value="Core-Switch-03";
+    document.getElementById("solarAlias").value="solarwinds-demo-01";
+    document.getElementById("solarMessage").value="Network device unreachable - Core-Switch-03";
+    document.getElementById("solarDescription").value="SolarWinds NPM detected device down during the evaluation demo.";
+    document.getElementById("solarSource").value="SolarWinds NPM";
+    document.getElementById("solarTags").value="network,critical,solarwinds,demo";
+  }else{
+    document.getElementById("bmsSeverity").value="Critical";
+    document.getElementById("bmsAction").value="Create";
+    document.getElementById("building").value="Tarrant County 911 Operations Center";
+    document.getElementById("zone").value="911 Dispatch Server Room";
+    document.getElementById("system").value="HVAC";
+    document.getElementById("controller").value="RC-BACnet-CTRL-07";
+    document.getElementById("alarm").value="High Temperature";
+    document.getElementById("temperature").value="88°F";
+    document.getElementById("threshold").value="80°F";
+    document.getElementById("bmsAlias").value="RC-BMS-TEMP-001";
+    document.getElementById("bmsDescription").value="Reliable Controls BMS detected a temperature of 88°F in the 911 Dispatch Server Room. Configured threshold is 80°F.";
+    document.getElementById("bmsSource").value="Reliable Controls BMS";
+    document.getElementById("bmsTags").value="BMS,HVAC,temperature,Tarrant911,demo";
+  }
+  document.getElementById("status").className="status";
+  updatePreview();
+}
+
+function showStatus(message,type){
+  const s=document.getElementById("status");
+  s.className="status "+type;
+  s.textContent=message;
+}
+
+document.querySelectorAll("input,select,textarea").forEach(e=>{
+  e.addEventListener("input",updatePreview);
+  e.addEventListener("change",updatePreview);
+});
+document.getElementById("configuredEndpoint").value=DEMO_CONFIG[currentSource].name+" → "+DEMO_CONFIG[currentSource].team;
+updatePreview();
 </script>
-
 </body>
 </html>
